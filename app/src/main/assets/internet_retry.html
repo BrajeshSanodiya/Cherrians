@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+</head>
+<style>
+.button {
+  background-color: #4CAF50;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  cursor: pointer;
+}
+
+.vertical-center {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  -ms-transform: translateY(-50%);
+  transform: translateY(-50%);
+}
+
+.wrapper {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.defaultbutton {
+   font-size: 18px;
+   padding: 7px 16px;
+   margin: 4px 2px;
+   border-radius: 12px;
+   outline:none;
+ }
+
+ .text {
+  color: #505050;
+  font-size: 17px;
+  text-align: center;
+  padding: 15px 32px;
+   }
+</style>
+</head>
+<body>
+<div class="vertical-center">
+    <div class="wrapper">
+        <h3 class="text" >No Internet Connection. Make sure that Wi-Fi or Cellular mobile data is turned on, then try again.</h3>
+    </div>
+    <div class="wrapper">
+        <button class="defaultbutton" onClick="internetRetry()" > Retry </button>
+    </div>
+</div>
+
+<script type="text/javascript">
+  function internetRetry() {
+            AndroidInterface.internetRetry();
+  }
+
+</script>
+
+<!--
+<a href="#" class="button">Link Button</a>
+<button class="button">Button</button>
+<input type="button" class="button" value="Input Button">
+-->
+</body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:id="@+id/rootLayout"
+    tools:context=".MainActivity">
+
+    <RelativeLayout
+        android:id="@+id/homeLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        >
+        <WebView
+            android:id="@+id/webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <RelativeLayout
+            android:id="@+id/webNetworkLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="20dp"
+            android:gravity="center_vertical"
+            android:background="@android:color/white"
+            android:visibility="gone"
+            >
+            <ProgressBar
+                android:id="@+id/webNetworkProgress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:visibility="gone"
+                />
+            <TextView
+                android:id="@+id/webNetworkText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:textSize="16sp"
+                android:layout_below="@+id/webNetworkProgress"
+                android:text="No Internet Connection. Make sure that Wi-Fi or Cellular mobile data is turned on, then try again."
+                />
+            <Button
+                android:id="@+id/webNetworkBtn"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/white"
+                android:textSize="16sp"
+               android:layout_centerHorizontal="true"
+                android:layout_below="@+id/webNetworkText"
+                android:onClick="internetRetry"
+                android:enabled="false"
+                android:background="@color/colorAccent"
+                android:text="Retry"
+                />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/splashLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/splash_background"
+        android:visibility="visible"
+        >
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="100dp"
+            android:layout_centerInParent="true"
+            android:src="@drawable/splash_logo" />
+    </RelativeLayout>
+
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

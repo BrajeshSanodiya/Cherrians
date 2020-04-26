@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <title>Hello</title>
+
+    <style>
+      body, html {
+        height: 100%;
+        text-align: center;
+        <!--display: flex;-->
+        justify-content: center;
+        align-items: center;
+        color: #F89821;
+        background-color: #ffffff;
+        margin-top: 10px;
+        margin-bottom: 20px;
+      }
+
+
+    </style>
+
+</head>
+<body>
+<p id="version"></p>
+<input type="button" value="Show API Version in Html" onClick="showVersionHtml('called within the html')"/>
+
+<br/><br/>
+
+<input type="button" value="Say hello" onClick="showToast('Hello Android!')"/>
+
+<br/><br/>
+
+<input type="button" value="Show API Version Alert" onClick="getDeviceVersion()"/>
+
+<br/><br/>
+
+<input type="button" value="Get App Version" onClick="getAppVersion()"/>
+
+<br/><br/>
+
+<input type="button" value="Get App Platform" onClick="getAppPlatform()"/>
+
+<br/><br/>
+
+<input type="button" value="getAppDeviceInfo" onClick="getAppDeviceInfo()"/>
+
+<br/><br/>
+
+<input type="button" value="Set Data in Local" onClick="setLocalData('name','Brajesh Kumar Sanodiya')"/>
+
+<br/><br/>
+
+<input type="button" value="Get Data From Local" onClick="getLocalData('name')"/>
+
+<br/><br/>
+
+<input type="button" value="Back Click" onClick="backScreen()"/>
+
+<br/><br/>
+
+<input type="button" value="Open Full Activity" onClick="openFullWeb('https://www.google.co.in/')"/>
+
+<br/><br/>
+
+<input type="button" value="Close Screen" onClick="closeScreen()"/>
+
+<br/><br/>
+
+<input type="button" value="Close App" onClick="closeApp()"/>
+
+<br/><br/>
+
+<input type="button" value="Kill App" onClick="killApp()"/>
+
+<br/><br/>
+
+<input type="button" value="Share App" onClick="shareApp()"/>
+
+<br/><br/>
+
+<input type="button" value="Share Content" onClick="shareContent('message from Website')"/>
+
+<br/><br/>
+
+<input type="button" value="Share Content with title" onClick="shareContentWithTitle('message from Website','title from website')"/>
+
+<br/><br/>
+
+<input type="button" value="Send Email" onClick="sendEmail()"/>
+
+<br/><br/>
+
+<input type="button" value="Send Email With Subject" onClick="sendEmailWithSubject()"/>
+
+<br/><br/>
+
+<input type="button" value="Open App Store" onClick="openAppStore()"/>
+
+<br/><br/>
+
+<input type="button" value="Open App Store - Other App" onClick="openAppStore('com.whatsapp')"/>
+
+<br/><br/>
+
+<input type="button" value="Open Default Browser" onClick="openBrowser('https://www.cherrians.com/')"/>
+
+<br/><br/>
+
+<input type="button" value="Open Browser Chooser" onClick="openBrowserChooser('https://www.cherrians.com/')"/>
+
+<br/><br/>
+
+<input type="button" value="Open Chrome Browser" onClick="openChromeBrowser('https://www.cherrians.com/')"/>
+
+<br/><br/>
+
+<input type="button" value="Open Chrome Tab" onClick="openChormeTab('https://www.cherrians.com/')"/>
+
+<br/><br/>
+
+<script type="text/javascript">
+
+        function showToast(toast) {
+            AndroidInterface.showToast(toast);
+        }
+
+        function showVersionHtml(msg) {
+            var myVar = AndroidInterface.getDeviceVersion();
+            document.getElementById("version").innerHTML = msg + " You are running API Version " + myVar;
+        }
+
+		function getDeviceVersion() {
+			var myVar = AndroidInterface.getDeviceVersion();
+			 AndroidInterface.showToast(myVar);
+        }
+
+        function getAppVersion() {
+			var myVar = AndroidInterface.getAppVersion();
+			 AndroidInterface.showToast(myVar);
+        }
+
+        function getAppPlatform() {
+			var myVar = AndroidInterface.getAppPlatform();
+			 AndroidInterface.showToast(myVar);
+        }
+
+        function getAppDeviceInfo() {
+			var myVar = AndroidInterface.getAppDeviceInfo();
+			 AndroidInterface.showToast(myVar);
+        }
+
+		function setLocalData(key, value) {
+			 AndroidInterface.setLocalData(key, value);
+        }
+
+		function getLocalData(key) {
+			 var myVar=AndroidInterface.getLocalData(key);
+			  AndroidInterface.showToast(myVar);
+        }
+
+		function backScreen() {
+			 AndroidInterface.backScreen();
+        }
+
+		function openFullWeb(url) {
+			 AndroidInterface.openFullWeb(url);
+        }
+
+		function closeScreen() {
+			 AndroidInterface.closeScreen();
+        }
+
+		function closeApp() {
+			 AndroidInterface.closeApp();
+        }
+        function killApp() {
+			 AndroidInterface.killApp();
+        }
+
+		function shareApp() {
+			 AndroidInterface.shareApp();
+        }
+
+		function shareContent(msg) {
+			 AndroidInterface.shareContent(msg);
+        }
+
+		function shareContentWithTitle(msg,title) {
+			 AndroidInterface.shareContentWithTitle(msg,title);
+        }
+
+        function sendEmail() {
+			 AndroidInterface.sendEmail('brajesh.sanodiya@gmail.com');
+        }
+
+        function sendEmailWithSubject() {
+			 AndroidInterface.sendEmailWithSubject('brajesh.sanodiya@gmail.com','custom subject');
+        }
+
+        function openAppStore() {
+			 AndroidInterface.openAppStore();
+        }
+
+        function openAppStore(packageName) {
+			 AndroidInterface.openAppStore(packageName);
+        }
+
+        function openBrowser(url) {
+			 AndroidInterface.openBrowser(url);
+        }
+
+        function openBrowserChooser(url) {
+			 AndroidInterface.openBrowserChooser(url);
+        }
+
+        function openChromeBrowser(url) {
+			 AndroidInterface.openChromeBrowser(url);
+        }
+
+        function openChormeTab(url) {
+			 AndroidInterface.openChormeTab(url);
+        }
+
+
+
+</script>
+
+
+</body>
+</html>
+
+
+
+
