@@ -25,19 +25,15 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
         getSupportActionBar()!!.hide()
         setContentView(R.layout.activity_main)
 
-       /* if(!Utils.checkInternetConnection(this)){
-            showMessage(false)
-        }else{*/
-            loadWebView("https://www.cherrians.com/?ref=app")
-            //loadWebView("https://www.cherrians.com/public/app_script_check.html")
-            //loadWebView("file:///android_asset/app_script_check.html")
-        /*}*/
+        loadWebView("https://www.cherrians.com/?ref=app")
+        //loadWebView("https://www.cherrians.com/public/app_script_check.html")
+        //loadWebView("file:///android_asset/app_script_check.html")
     }
 
     @SuppressLint("SetJavaScriptEnabled")
     private fun loadWebView(url:String){
         webView!!.loadUrl(url)
-        webView!!.addJavascriptInterface(WebAppInterface(this, this),"AndroidInterface") // To call methods in Android from using js in the html, AndroidInterface.showToast, AndroidInterface.getAndroidVersion etc
+        webView!!.addJavascriptInterface(WebAppInterface(this, this),"AndroidInterface")
         WebView.setWebContentsDebuggingEnabled(true)
 
         val webSettings = webView!!.settings
@@ -53,6 +49,10 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
         webView!!.overScrollMode=View.OVER_SCROLL_NEVER
         webView!!.isVerticalScrollBarEnabled=false
         webView!!.isHorizontalScrollBarEnabled=false
+
+        webViewRefreshLayout.setOnRefreshListener {
+            webView.reload()
+        }
     }
 
     override fun backScreen() {
@@ -86,23 +86,20 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
             view: WebView,
             url: String
         ) {
+            webViewRefreshLayout.isRefreshing = false
             GlobalScope.launch(Dispatchers.Main) {
                 delay(1000)
                 splashLayout.visibility=View.GONE
             }
-            //Calling a javascript function in html page
-            //view.loadUrl("javascript:alert(showVersion('called by Android'))");
         }
-
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
             if(webNetworkLayout.visibility==View.VISIBLE)
-            GlobalScope.launch(Dispatchers.Main) {
-                delay(1000)
-                webNetworkProgress.visibility=View.GONE
-                webNetworkLayout.visibility=View.GONE
-            }
+                GlobalScope.launch(Dispatchers.Main) {
+                    delay(1000)
+                    webNetworkProgress.visibility=View.GONE
+                    webNetworkLayout.visibility=View.GONE
+                }
         }
-
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
             if(!Utils.checkInternetConnection(this@MainActivity)){
                 showMessage(false)
@@ -111,7 +108,6 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
             }
             return true
         }
-
         override fun onReceivedError(
             view: WebView?,
             errorCode: Int,
@@ -120,7 +116,7 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
         ) {
             webNetworkLayout.visibility=View.VISIBLE
             webNetworkBtn.isEnabled=true
-           // view!!.loadUrl("file:///android_asset/internet_retry.html")
+            // view!!.loadUrl("file:///android_asset/internet_retry.html")
         }
     }
 
@@ -136,6 +132,7 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
             return true
         }
     }
+
     private var backPressedOnce = false
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(splashLayout.visibility==View.GONE){
