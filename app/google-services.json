@@ -1,0 +1,56 @@
+{
+  "project_info": {
+    "project_number": "518699208318",
+    "firebase_url": "https://jans-cherrians.firebaseio.com",
+    "project_id": "jans-cherrians",
+    "storage_bucket": "jans-cherrians.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:518699208318:android:93cfe42d276554fef0522f",
+        "android_client_info": {
+          "package_name": "com.jans.cherrians"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "518699208318-likvicknakbg0v19omrge715k2hpc4jq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jans.cherrians",
+            "certificate_hash": "1b4656f6f98d06eec74b80d70b2075edd0e725ca"
+          }
+        },
+        {
+          "client_id": "518699208318-ub582colgpr7ea3igqp6ue92k8oqv9oa.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.jans.cherrians",
+            "certificate_hash": "976a459d5a4baec19e4ce4128757e7015f6c2e0b"
+          }
+        },
+        {
+          "client_id": "518699208318-ot9visgl6ldn95ooshf5hh5srk0stjt0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHra_kiLwbg9cZ_dWpAZthTPkTaC-v9L4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "518699208318-ot9visgl6ldn95ooshf5hh5srk0stjt0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

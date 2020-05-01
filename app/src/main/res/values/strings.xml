@@ -7,4 +7,8 @@
     <string name="app_share_subject">Check this out!</string>
     <string name="app_share_link">https://play.google.com/store/apps/details?id=com.jans.cherrians</string>
 
+    <string name="app_web_host">www.cherrians.com</string>
+    <string name="app_web_url">https://www.cherrians.com/?ref=app</string>
+
+
 </resources>
