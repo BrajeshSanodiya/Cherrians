@@ -75,9 +75,10 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
     }
 
     private fun registerForNotificationTopic() {
-        var topic="REL_AND_ALL"
+        var topic="PROD_AND_ALL"
         if(BuildConfig.DEBUG)
-            topic= "DEB_AND_ALL"
+            topic= "STAG_AND_ALL"
+
         Log.d(TAG_NOTIFY, "Subscribing to $topic topic")
         FirebaseMessaging.getInstance().subscribeToTopic(topic)
             .addOnCompleteListener { task ->

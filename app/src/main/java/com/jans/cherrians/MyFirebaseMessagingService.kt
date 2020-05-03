@@ -6,7 +6,6 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.media.RingtoneManager
 import android.os.Build
 import android.text.Html
@@ -16,13 +15,11 @@ import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
 import com.jans.imageload.DefaultImageLoader
 import com.jans.imageload.Result
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
-import javax.inject.Scope
 
 
 class MyFirebaseMessagingService : FirebaseMessagingService() {
@@ -179,9 +176,8 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
 
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
 
-        val pendingIntent = PendingIntent.getActivity(context, 0 /* Request code */, intent,
+        val pendingIntent = PendingIntent.getActivity(context, System.currentTimeMillis().toInt(), intent,
             PendingIntent.FLAG_ONE_SHOT)
         val channelId = getString(R.string.default_notification_channel_id)
         val channelName=getString(R.string.default_notification_channel_name)
@@ -191,14 +187,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
 
         val notificationBuilder = NotificationCompat.Builder(context, channelId)
             .setSmallIcon(R.mipmap.ic_launcher)
-
             .setContentTitle(Html.fromHtml(title))
             .setContentText(Html.fromHtml(desc))
-            .setContentIntent(pendingIntent)
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+            .setContentIntent(pendingIntent)
             .setAutoCancel(true)
             .setSound(defaultSoundUri)
-
         longBitmap?.let {
             notificationBuilder.setLargeIcon(longBitmap)
             if(notificationType==Utils.NOTIFICATION_LAYOUT_DEFAULT_BIG){
@@ -223,13 +217,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
             val channel = NotificationChannel(channelId,channelName,NotificationManager.IMPORTANCE_DEFAULT)
             notificationManager.createNotificationChannel(channel)
         }
-
-        notificationManager.notify(notificationID()/* ID of notification */, notificationBuilder.build())
+        val notificationId=notificationID()
+        Log.d(TAG, "notificationId $notificationId")
+        notificationManager.notify(notificationId, notificationBuilder.build())
     }
 
-    fun notificationID(): Int {
-        val now = Date()
-        return SimpleDateFormat("ddHHmmss", Locale.US).format(now).toInt()
+    private fun notificationID(): Int {
+        return System.currentTimeMillis().toInt()
+       /* val now = Date()
+        return SimpleDateFormat("ddHHmmss", Locale.US).format(now).toInt()*/
     }
 
     companion object {
