@@ -20,7 +20,9 @@ class WebViewActivity : BaseActivity(), WebAppInterface.WebCallback {
         webView = WebView(this)
         webView!!.loadUrl(url)
         webView!!.addJavascriptInterface(WebAppInterface(this, this), "AndroidInterface")
-        WebView.setWebContentsDebuggingEnabled(true)
+        if (BuildConfig.DEBUG) {
+            WebView.setWebContentsDebuggingEnabled(true)
+        }
         val webSettings = webView!!.settings
         webSettings.databaseEnabled = true
         webSettings.domStorageEnabled = true

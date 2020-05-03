@@ -9,6 +9,8 @@
 
     <string name="app_web_host">www.cherrians.com</string>
     <string name="app_web_url">https://www.cherrians.com/?ref=app</string>
+    <string name="default_notification_channel_id">101</string>
+    <string name="default_notification_channel_name">Cherry Basket</string>
 
 
 </resources>

@@ -2,17 +2,34 @@ package com.jans.cherrians
 
 import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
+import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.Build
+import android.text.Html
 import android.text.TextUtils
+import android.view.Gravity
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.browser.customtabs.CustomTabsIntent
 
 
 object Utils {
 
+    const val NOTIFICATION_LAYOUT_NONE: Int = 0
+    const val NOTIFICATION_LAYOUT_DEFAULT_SMALL: Int = 1
+    const val NOTIFICATION_LAYOUT_DEFAULT_BIG: Int = 2
+    const val NOTIFICATION_LAYOUT_DEFAULT_MULTILINE: Int = 3
+
+
     val app_platform="android"
+
+    val LAUNCH_FROM_NOTIFY="LAUNCH_FROM_NOTIFY"
+    val NOTIFY_BODY="NOTIFY_BODY"
+    val NOTIFY_TITLE="NOTIFY_TEXT"
+    val NOTIFY_WEB_URL="NOTIFY_WEB_URL"
 
     fun shareApp(context: Context, msg:String?=null, subject:String?=null) {
 
@@ -153,5 +170,24 @@ object Utils {
         val con_manager =context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         return (con_manager.activeNetworkInfo != null && con_manager.activeNetworkInfo.isAvailable
                 && con_manager.activeNetworkInfo.isConnected)
+    }
+
+
+    fun showDialog(context: Context,title:String,message:String) {
+        val builder: AlertDialog.Builder = AlertDialog.Builder(context)
+        builder.setMessage(Html.fromHtml(message.trimIndent()))
+        val textView = TextView(context)
+        textView.setText(Html.fromHtml(title))
+        textView.setBackgroundColor(Color.DKGRAY)
+        textView.setPadding(20, 20, 20, 20)
+        textView.gravity = Gravity.CENTER
+        textView.setTextColor(Color.WHITE)
+        textView.textSize = 20f
+        builder.setCustomTitle(textView)
+            .setPositiveButton(android.R.string.ok,
+                DialogInterface.OnClickListener { dialog, whichButton ->
+                    //finishAffinity();
+                })
+        builder.show()
     }
 }

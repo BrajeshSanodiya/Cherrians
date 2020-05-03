@@ -13,32 +13,37 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         >
-        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        <!--<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
             android:id="@+id/webViewRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-
-            >
-            <androidx.core.widget.NestedScrollView
+            >-->
+           <!-- <androidx.core.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                >
+                >-->
 
                 <WebView
                     android:id="@+id/webView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentStart="true"
                     android:layout_alignParentTop="true"
                     />
 
-            </androidx.core.widget.NestedScrollView>
+            <!--</androidx.core.widget.NestedScrollView>-->
 
-        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+        <!--</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>-->
 
-
+        <ProgressBar
+            android:id="@+id/webLoadProgress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:visibility="gone"
+            />
 
 
         <RelativeLayout

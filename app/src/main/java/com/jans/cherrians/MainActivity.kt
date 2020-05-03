@@ -14,14 +14,15 @@ import android.view.View
 import android.webkit.*
 import android.widget.Toast
 import androidx.core.os.postDelayed
+import com.google.firebase.BuildConfig
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 
 class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
+    private val TAG_NOTIFY:String="Notification"
+    private val TAG:String="MainActivity"
 /*    private val RC_APP_UPDATE: Int =1232
     var mAppUpdateManager:AppUpdateManager?=null*/
 
@@ -29,36 +30,72 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
 
     @SuppressLint("SetJavaScriptEnabled")
     override fun onCreate(savedInstanceState: Bundle?) {
-        println("MainActivity : onCreate")
         super.onCreate(savedInstanceState)
-
-        println("MainActivity : onCreate2")
         getSupportActionBar()!!.hide()
         setContentView(R.layout.activity_main)
 
-        var loadUrl:String=this.resources.getString(R.string.app_web_url)
-        val data: Uri? = intent.data
-        if(data!=null && !TextUtils.isEmpty(data.toString()) && data.toString().contains(resources.getString(R.string.app_web_host))){
-            loadUrl= data.toString()
-        }
-        //Snackbar.make(rootLayout,loadUrl,Snackbar.LENGTH_LONG).show()
-        loadWebView(loadUrl)
-        //loadWebView("https://www.cherrians.com/public/app_script_check.html")
-        //loadWebView("file:///android_asset/app_script_check.html")
+        initWebView()
+
+        loadDataFromIntent(intent)
 
         //checkForAppUpdate()
+
+        registerForNotificationTopic()
+    }
+
+    private fun loadDataFromIntent(intent: Intent?) {
+        if ( intent!=null && intent.extras != null && intent!!.extras!!.containsKey(Utils.LAUNCH_FROM_NOTIFY)) {
+            val title: String= intent.extras?.getString(Utils.NOTIFY_TITLE)?:"${R.string.app_name}"
+            val body: String = intent.extras?.getString(Utils.NOTIFY_BODY)?:"${R.string.app_name}"
+
+            if(webView!=null && intent!!.extras!!.containsKey(Utils.NOTIFY_WEB_URL) && !intent!!.extras!!.getString(Utils.NOTIFY_WEB_URL).isNullOrBlank()){
+                val webUrl: String? = intent.extras?.getString(Utils.NOTIFY_WEB_URL)
+                Log.d(TAG_NOTIFY, "loadDataFromIntent LAUNCH_FROM_NOTIFY Url: $webUrl title : $title body : $body")
+                webView.loadUrl(webUrl)
+            }else{
+                Log.d(TAG_NOTIFY, "loadDataFromIntent LAUNCH_FROM_NOTIFY Dailog $title $body")
+                webView.loadUrl(getString(R.string.app_web_url))
+                GlobalScope.launch(Dispatchers.Main) {
+                    delay(3000)
+                    Utils.showDialog(this@MainActivity,title=title,message =body)
+                }
+            }
+        }else if(intent!=null && intent!!.data!=null && !TextUtils.isEmpty(intent!!.data.toString()) && intent!!.data.toString().contains(resources.getString(R.string.app_web_host))){
+            Log.d(TAG_NOTIFY, "loadDataFromIntent Deeplink")
+            if( webView!=null && webView.url != intent!!.data.toString())
+                webView.loadUrl(intent!!.data.toString())
+        }
+
+        else{
+            Log.d(TAG_NOTIFY, "loadDataFromIntent Default")
+            webView.loadUrl(getString(R.string.app_web_url))
+            //webView.loadUrl("https://www.cherrians.com/public/app_script_check.html")
+            //webView.loadUrl("file:///android_asset/app_script_check.html")
+        }
+    }
+
+    private fun registerForNotificationTopic() {
+        var topic="REL_AND_ALL"
+        if(BuildConfig.DEBUG)
+            topic= "DEB_AND_ALL"
+        Log.d(TAG_NOTIFY, "Subscribing to $topic topic")
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+            .addOnCompleteListener { task ->
+                if(task.isSuccessful){
+                    Log.d(TAG_NOTIFY, "Topic : $topic has been registered")
+                }
+                else{
+                    Log.d(TAG_NOTIFY, "Topic : $topic not registered")
+                }
+            }
     }
 
     override fun onNewIntent(intent: Intent?) {
         super.onNewIntent(intent)
-        if(intent!=null){
-            val data: Uri? = intent!!.data
-            if(webView!=null && data!=null && !TextUtils.isEmpty(data.toString()) && data.toString().contains(resources.getString(R.string.app_web_host))){
-                if(webView.url != data.toString())
-                    webView.loadUrl(data.toString())
-            }
-        }
+        loadDataFromIntent(intent)
     }
+
+
 
 /*
     var installStateUpdatedListener: InstallStateUpdatedListener =
@@ -118,28 +155,40 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
 */
 
     @SuppressLint("SetJavaScriptEnabled")
-    private fun loadWebView(url:String){
-        webView!!.loadUrl(url)
+    private fun initWebView(){
+        //webView!!.loadUrl(url)
         webView!!.addJavascriptInterface(WebAppInterface(this, this),"AndroidInterface")
-        WebView.setWebContentsDebuggingEnabled(true)
+        if (BuildConfig.DEBUG) {
+            WebView.setWebContentsDebuggingEnabled(true)
+        }
 
         val webSettings = webView!!.settings
         webSettings.databaseEnabled = true
         webSettings.domStorageEnabled = true
         webSettings.javaScriptEnabled = true
+
+        webSettings.useWideViewPort=true
+        /*webSettings.loadsImagesAutomatically=true
+        webSettings.setSupportZoom(false)
+        webSettings.setSupportZoom(true)
+        webSettings.setBuiltInZoomControls(true)
+        webSettings.setDisplayZoomControls(true)
+        */
         if (Build.VERSION.SDK_INT >= 21) {
             webSettings.mixedContentMode = WebSettings.MIXED_CONTENT_ALWAYS_ALLOW
         }
 
+        webView.isLongClickable=false
+        webView.isFocusable=true
         webView!!.webViewClient = MyWebViewClient()
         webView!!.webChromeClient = MyWebChromeClient()
-        webView!!.overScrollMode=View.OVER_SCROLL_NEVER
+        webView!!.overScrollMode=View.OVER_SCROLL_ALWAYS
         webView!!.isVerticalScrollBarEnabled=false
         webView!!.isHorizontalScrollBarEnabled=false
 
-        webViewRefreshLayout.setOnRefreshListener {
+        /*webViewRefreshLayout.setOnRefreshListener {
             webView.reload()
-        }
+        }*/
     }
 
     override fun backScreen() {
@@ -177,11 +226,18 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
                 clearHistory = false;
                 webView.clearHistory();
             }
-            webViewRefreshLayout.isRefreshing = false
-            GlobalScope.launch(Dispatchers.Main) {
-                delay(1000)
-                splashLayout.visibility=View.GONE
+            //webViewRefreshLayout.isRefreshing = false
+
+            if(splashLayout.visibility==View.VISIBLE){
+                GlobalScope.launch(Dispatchers.Main) {
+                    delay(1000)
+                    splashLayout.visibility=View.GONE
+                }
             }
+            if(webLoadProgress.visibility==View.VISIBLE){
+                webLoadProgress.visibility=View.GONE
+            }
+
             super.onPageFinished(view, url);
         }
         override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
@@ -191,6 +247,7 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
                     webNetworkProgress.visibility=View.GONE
                     webNetworkLayout.visibility=View.GONE
                 }
+
         }
         override fun shouldOverrideUrlLoading(view: WebView?, url: String?): Boolean {
             if(!Utils.checkInternetConnection(this@MainActivity)){
@@ -228,13 +285,14 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
     private var backPressedOnce = false
     override fun onKeyDown(keyCode: Int, event: KeyEvent?): Boolean {
         if(splashLayout.visibility==View.GONE){
-            /*Snackbar.make(rootLayout,webView.url+"\n"+resources.getString(R.string.app_web_url),Snackbar.LENGTH_LONG).show()
-              Toast.makeText(this,"hi ${webView.url == getString(R.string.app_web_url)}",Toast.LENGTH_LONG).show()*/
             if (keyCode == KeyEvent.KEYCODE_BACK && webView!!.canGoBack()) {
+                Log.d(TAG, "onKeyDown going back")
                 webView!!.goBack()
                 return true
             }
             else if(webView!=null && webView.url != getString(R.string.app_web_url)){
+                webLoadProgress.visibility=View.VISIBLE
+                Log.d(TAG, "onKeyDown loading default home")
                 clearHistory = true
                 webView.loadUrl(resources.getString(R.string.app_web_url))
                 return true
@@ -252,17 +310,17 @@ class MainActivity : BaseActivity(), WebAppInterface.WebCallback  {
     }
 
 
-   /* override fun onActivityResult(
-        requestCode: Int,
-        resultCode: Int,
-        @Nullable data: Intent?
-    ) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == RC_APP_UPDATE) {
-            if (resultCode != Activity.RESULT_OK) {
-                Log.e("MainActivity", "onActivityResult: app download failed")
-            }
-        }
-    }*/
+    /* override fun onActivityResult(
+         requestCode: Int,
+         resultCode: Int,
+         @Nullable data: Intent?
+     ) {
+         super.onActivityResult(requestCode, resultCode, data)
+         if (requestCode == RC_APP_UPDATE) {
+             if (resultCode != Activity.RESULT_OK) {
+                 Log.e("MainActivity", "onActivityResult: app download failed")
+             }
+         }
+     }*/
 
 }

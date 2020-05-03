@@ -14,13 +14,22 @@ open class BaseActivity : AppCompatActivity(), ConnectivityReceiver.Connectivity
         fun dismiss()
     }
 */
+    private  lateinit var connectivityReceiver:ConnectivityReceiver
     private var mSnackBar: Snackbar? = null
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        registerReceiver(ConnectivityReceiver(),
-            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
-    }
 
+    }
+    override fun onStart() {
+        connectivityReceiver= ConnectivityReceiver()
+        registerReceiver(connectivityReceiver,
+            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION))
+        super.onStart()
+    }
+    override fun onStop() {
+        unregisterReceiver(connectivityReceiver)
+        super.onStop()
+    }
     protected fun showMessage(isConnected: Boolean) {
         if (!isConnected) {
             val messageToUser = "You are offline now."

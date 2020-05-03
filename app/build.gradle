@@ -20,7 +20,7 @@ android {
         applicationId "com.jans.cherrians"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 4
+        versionCode 5
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
@@ -80,5 +80,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-analytics:17.4.0'
     implementation 'com.google.firebase:firebase-crashlytics:17.0.0'
     // using for app update
-   /* implementation 'com.google.android.play:core:1.7.2'*/
+    /* implementation 'com.google.android.play:core:1.7.2'*/
+    implementation 'com.google.firebase:firebase-messaging:20.1.6'
+
+   /* implementation 'com.google.code.gson:gson:2.8.6'
+
+    implementation 'org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0'*/
+
+    implementation project(':libraries:imageload')
 }
