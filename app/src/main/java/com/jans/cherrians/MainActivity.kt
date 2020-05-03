@@ -14,7 +14,6 @@ import android.view.View
 import android.webkit.*
 import android.widget.Toast
 import androidx.core.os.postDelayed
-import com.google.firebase.BuildConfig
 import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.coroutines.*
