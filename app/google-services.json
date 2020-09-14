@@ -5,6 +5,7 @@
     "project_id": "jans-cherrians",
     "storage_bucket": "jans-cherrians.appspot.com"
   },
+  
   "client": [
     {
       "client_info": {
